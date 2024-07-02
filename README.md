@@ -3,6 +3,8 @@
 ## Overview
 This project aims to develop an open-source Verilog copilot by fine-tuning large language models (LLMs) using QLoRA, PEFT, and Unsloth on the Verigen dataset. The copilot assists in generating high-quality Verilog code, making the hardware design process more efficient and less error-prone.
 
+![a38a5d2f-e308-446e-88b1-3cfe5b2078b8](https://github.com/Mattjesc/OS-Verilog-Copilot-FT-LLM-Unsloth/assets/147006999/eb497afd-0220-4656-bd7e-2c994255d1fc)
+
 **Disclaimer:**
 This project is designed to be feasible within the constraints of a single GPU setup. Model selection, quantization, and training parameters are optimized for an RTX 3090 GPU. The performance and capabilities of the project may vary based on the hardware specifications. Additionally, library and dependency versions may change over time, affecting the results.
 
@@ -62,49 +64,10 @@ graph TD;
     P --> R[Run Inference Tests];
 ```
 
-### Model Preparation
-```mermaid
-graph TD;
-    A[Initialize Model Directory] --> B[Download Original Model];
-    B --> C[Verify Model Integrity];
-    C --> D[Save Model to Disk];
-    D --> E[Download Tokenizer];
-    E --> F[Verify Tokenizer Integrity];
-    F --> G[Save Tokenizer to Disk];
-```
-
-### Fine-Tuning
-```mermaid
-graph TD;
-    A[Load Pre-trained Model] --> B[Apply QLoRA & PEFT Techniques];
-    B --> C[Load Training Data];
-    C --> D[Configure Training Parameters];
-    D --> E[Run Training Script];
-    E --> F[Monitor Training Progress];
-    F --> G[Save Checkpoints Regularly];
-    G --> H[Save Final Fine-Tuned Model];
-```
-
-### Testing and Deployment
-```mermaid
-graph TD;
-    A[Load Fine-Tuned Model] --> B[Load Tokenizer];
-    B --> C[Initialize Gradio Interface];
-    C --> D[Create Input Text Box];
-    C --> E[Create Output Text Box];
-    D --> F[User Inputs Query];
-    F --> G[Generate Response using Model];
-    G --> H[Display Response in Output Box];
-    E --> I[User Selects Model Version];
-    I --> J[Toggle between Original and Fine-Tuned Models];
-    J --> F;
-    G --> K[Document Results and Observations];
-```
-
 ## Environment Setup
 1. **Clone the Repository**:
     ```sh
-    git clone <repository_url>
+    git clone <https://github.com/Mattjesc/OS-Verilog-Copilot-FT-LLM-Unsloth>
     cd verilog_copilot_project
     ```
 
@@ -122,8 +85,12 @@ graph TD;
 ## Model Preparation
 ```mermaid
 graph TD;
-    A[Download Original Model] --> B[Save Model Locally];
-    B --> C[Download Tokenizer] --> D[Save Tokenizer Locally];
+    A[Initialize Model Directory] --> B[Download Original Model];
+    B --> C[Verify Model Integrity];
+    C --> D[Save Model to Disk];
+    D --> E[Download Tokenizer];
+    E --> F[Verify Tokenizer Integrity];
+    F --> G[Save Tokenizer to Disk];
 ```
 
 1. **Download Original Model**:
@@ -137,13 +104,19 @@ graph TD;
 ## Fine-Tuning
 ```mermaid
 graph TD;
-    A[Load Pre-trained Model] --> B[Apply QLoRA & PEFT];
-    B --> C[Run Training Script];
-    C --> D[Save Fine-Tuned Model];
+    A[Load Pre-trained Model] --> B[Apply QLoRA & PEFT Techniques];
+    B --> C[Load Training Data];
+    C --> D[Configure Training Parameters];
+    D --> E[Run Training Script];
+    E --> F[Monitor Training Progress];
+    F --> G[Save Checkpoints Regularly];
+    G --> H[Save Final Fine-Tuned Model];
 ```
 
 This project uses the `Unsloth` package for quantization and fine-tuning due to its efficiency in resource-constrained environments. The fine-tuning script is provided in `finetune_llama3.py`.
 
+Example Fine-Tuning log:
+```sh
 🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
 config.json: 100%|████████████████████████████████████████████████████| 1.20k/1.20k [00:00<00:00, 16.3MB/s]
 ==((====))==  Unsloth: Fast Llama patching release 2024.6
@@ -228,8 +201,23 @@ O^O/ \_/ \    Batch size per device = 2 | Gradient Accumulation steps = 4
 {'train_runtime': 674.1454, 'train_samples_per_second': 0.712, 'train_steps_per_second': 0.089, 'train_loss': 0.863763881723086, 'epoch': 0.0}
 100%|██████████████████████████████████████████████████████████████████████| 60/60 [11:14<00:00, 11.24s/it]
 Fine-tuning completed
+```
 
 ## Testing
+```mermaid
+graph TD;
+    A[Load Fine-Tuned Model] --> B[Load Tokenizer];
+    B --> C[Initialize Gradio Interface];
+    C --> D[Create Input Text Box];
+    C --> E[Create Output Text Box];
+    D --> F[User Inputs Query];
+    F --> G[Generate Response using Model];
+    G --> H[Display Response in Output Box];
+    E --> I[User Selects Model Version];
+    I --> J[Toggle between Original and Fine-Tuned Models];
+    J --> F;
+    G --> K[Document Results and Observations];
+```
 To test the model, run the `app.py` script. This script uses Gradio to create a web interface for testing the original and fine-tuned models.
 ```sh
 python app.py
@@ -255,69 +243,3 @@ This project utilizes the Verigen dataset for training and evaluation. Special t
 - **Shailja Thakur**, **Baleegh Ahmad**, **Hammond Pearce**, **Benjamin Tan**, **Brendan Dolan-Gavitt**, **Ramesh Karri**, **Siddharth Garg**.
 
 [Benchmarking Large Language Models for Automated Verilog RTL Code Generation](https://arxiv.org/abs/2212.11140)
-
-## Architecture Diagram
-
-### Overall Workflow
-```mermaid
-graph TD;
-    A[Environment Setup] --> B[Create Virtual Environment]
-    B --> C[Install Dependencies];
-    C --> D[Clone Repository];
-    D --> E[Model Preparation];
-    E --> F[Download Original Model];
-    E --> G[Download Tokenizer];
-    F --> H[Save Original Model];
-    G --> I[Save Tokenizer];
-    H --> J[Fine-Tuning];
-    I --> J;
-    J --> K[Prepare Training Data];
-    K --> L[Run Fine-Tuning Script];
-    L --> M[Save Fine-Tuned Model];
-    M --> N[Testing & Deployment];
-    N --> O[Load Fine-Tuned Model];
-    O --> P[Initialize Gradio Interface];
-    P --> Q[User Interaction];
-    P --> R[Run Inference Tests];
-```
-
-### Model Preparation
-```mermaid
-graph TD;
-    A[Initialize Model Directory] --> B[Download Original Model];
-    B --> C[Verify Model Integrity];
-    C --> D[Save Model to Disk];
-    D --> E[Download Tokenizer];
-    E --> F[Verify Tokenizer Integrity];
-    F --> G[Save Tokenizer to Disk];
-```
-
-### Fine-Tuning
-```mermaid
-graph TD;
-    A[Load Pre-trained Model] --> B[Apply QLoRA & PEFT Techniques];
-    B --> C[Load Training Data];
-    C --> D[Configure Training Parameters];
-    D --> E[Run Training Script];
-    E --> F[Monitor Training Progress];
-    F --> G[Save Checkpoints Regularly];
-    G --> H[Save Final Fine-Tuned Model];
-```
-
-### Testing and Deployment
-```mermaid
-graph TD;
-    A[Load Fine-Tuned Model] --> B[Load Tokenizer];
-    B --> C[Initialize Gradio Interface];
-    C --> D[Create Input Text Box];
-    C --> E[Create Output Text Box];
-    D --> F[User Inputs Query];
-    F --> G[Generate Response using Model];
-    G --> H[Display Response in Output Box];
-    E --> I[User Select
-
-s Model Version];
-    I --> J[Toggle between Original and Fine-Tuned Models];
-    J --> F;
-    G --> K[Document Results and Observations];
-```
