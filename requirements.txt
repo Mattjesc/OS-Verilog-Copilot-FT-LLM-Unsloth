@@ -1,0 +1,11 @@
+torch==2.1.1
+triton
+unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git
+xformers
+trl<0.9.0
+peft
+accelerate
+bitsandbytes
+datasets
+transformers
+gradio
